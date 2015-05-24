@@ -19,3 +19,14 @@ h = linear_hypothesis(theta)
 
 Y = h(X) + np.random.normal(-1, 1, m);
 
+def cost_function(x, y):
+    assert (len(x) == len(y))
+    m = len(x)
+    return lambda theta: 1./(2. * float(m)) * \
+    ((linear_hypothesis(theta)(x) - y)**2).sum()
+
+def compute_new_theta(x, y, theta, alpha):
+    assert (len(x) == len(y))
+    m = len(x)
+    return (theta - alpha * (1./float(m) * \
+    x.T.dot(linear_hypothesis(theta)(x) - y)))
