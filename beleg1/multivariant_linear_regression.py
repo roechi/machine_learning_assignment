@@ -10,9 +10,12 @@ x2 = np.random.uniform(x_min, x_max, m)
 
 X = np.column_stack([x1, x2])
 
-theta = np.random.uniform(x_min, x_max, m)
+theta = np.random.uniform(x_min, x_max, 2)
 
 def linear_hypothesis(theta):
-    return lambda x: x.T.dot(theta)
+    return lambda x: x.dot(theta)
 
-Y = h(X) + np.random.normal(0, 1, 2);
+h = linear_hypothesis(theta)
+
+Y = h(X) + np.random.normal(-1, 1, m);
+
