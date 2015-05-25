@@ -28,7 +28,7 @@ def gradient_decent(alpha, theta, nb_iterations, X, y):
 
 x_min = -10.
 x_max = 10.
-m = 10
+m = 100
 
 x0 = np.ones(m)
 x1 = np.random.uniform(x_min, x_max, m)
@@ -36,11 +36,11 @@ x2 = np.random.uniform(x_min, x_max, m)
 
 X = np.column_stack([x0, x1, x2])
 
-theta = np.random.normal(-10, 10, 3)
+theta = np.random.uniform(x_min, x_max, 3)
 
 h = linear_hypothesis(theta)
 
-Y = h(X) + np.random.normal(-5, 5, m)
+Y = h(X) + np.random.normal(0, 10, m)
 
 plt.figure(1)
 plt.subplot(111, projection='3d')
@@ -62,7 +62,7 @@ surf_x, surf_y = np.meshgrid(surf_x, surf_y)
 SurfX = np.array([np.array([1., xx, yy]) for xx, yy in zip(np.ravel(surf_x), np.ravel(surf_y))])
 surf_z = linear_hypothesis(theta)(SurfX)
 surf_z = surf_z.reshape(surf_x.shape)
-ax.plot_surface(surf_x, surf_y, surf_z, rstride=1, cstride=1, cmap=cm.coolwarm,linewidth=0, antialiased=True)
+ax.plot_surface(surf_x, surf_y, surf_z, rstride=1, cstride=1, cmap=cm.gist_rainbow, linewidth=0, antialiased=True)
 ax.scatter(x1, x2, zs=Y, zdir=u'z', s=20, c=u'r', depthshade=True)
 plt.show()
 
