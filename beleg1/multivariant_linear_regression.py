@@ -44,7 +44,7 @@ theta = np.random.uniform(x_min, x_max, 3)
 h = linear_hypothesis(theta)
 Y = h(X) + np.random.normal(0, 10, m)
 
-# Set constraint for gradient decent
+# Set constraint for gradient decent 
 it = 500
 alpha = 0.01
 
@@ -66,4 +66,3 @@ zp = zp.reshape(xp.shape)
 ax.plot_surface(xp, xy, zp, rstride=1, cstride=1, cmap=cm.gist_rainbow, linewidth=0, antialiased=True, alpha=0.5)
 ax.scatter(x1, x2, zs=Y, zdir=u'z', s=20, c=u'r', depthshade=True)
 plt.show()
-
