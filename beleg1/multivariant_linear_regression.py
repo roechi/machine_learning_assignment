@@ -63,7 +63,7 @@ xp, xy = np.meshgrid(xp, xy)
 XP = np.array([np.array([1., xx, yy]) for xx, yy in zip(np.ravel(xp), np.ravel(xy))])
 zp = linear_hypothesis(theta)(XP)
 zp = zp.reshape(xp.shape)
-ax.plot_surface(xp, xy, zp, rstride=1, cstride=1, cmap=cm.gist_rainbow, linewidth=0, antialiased=True)
+ax.plot_surface(xp, xy, zp, rstride=1, cstride=1, cmap=cm.gist_rainbow, linewidth=0, antialiased=True, alpha=0.5)
 ax.scatter(x1, x2, zs=Y, zdir=u'z', s=20, c=u'r', depthshade=True)
 plt.show()
 
