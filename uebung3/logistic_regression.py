@@ -31,3 +31,7 @@ h = logistic_hypothesis(theta)
 
 print(h(X.T))
 
+def squared_error(x, y, theta):
+    h = logistic_hypothesis(theta)
+    return 0.5 * (h(x) - y)**2
+
