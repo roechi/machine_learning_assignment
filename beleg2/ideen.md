@@ -67,7 +67,7 @@ The primary goal of EDA is to maximize the analyst's insight into a data set and
 
 ###Mögliche ToDos:
 
-- Wie ist die Altersverteilung beim financial distress (dictionary: Zeile 6,10,12)
+- Wie ist die Altersverteilung beim financial distress (dictionary: Zeile 6,10,12): Das Alter scheint keine Auswirkung auf den Distress zu haben.
 
 - Welches Einkommen haben die schlimmen Schuldner (Ist es ein arme Leute Problem, oder ein Mittelstandsproblem?, Auch reiche Leute könnten versuchen, sich aus Krediten mit Hilfe ihrer Anwälte herauszuklagen....)
 
