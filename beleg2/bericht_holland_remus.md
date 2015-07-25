@@ -9,7 +9,7 @@
 
 Die Zielklasse ist _SeriousDlqin2yrs_, welche Aussage darüber trifft, ob der Kreditnehmer innerhalb zweier Jahre nach Vertragsschluss in ernsthafte Zahlungsschwiereigkeiten kam. Zunächst betrachten wir die Verteilung dieser Klasse auf den Trainingsdaten.
 
-![Verteilung von SeriousDlqin2yrs](img/output_9_1.png-scaled.png)
+![Verteilung von SeriousDlqin2yrs](img/output_10_1.png-scaled.png)
 
 #Data Wrangling
 
