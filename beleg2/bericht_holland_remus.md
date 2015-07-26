@@ -195,24 +195,24 @@ Von diesen 150000 Datensätzen verfügten 29731 über NaN-Einträge. Für die Be
 - Data Cleaning: die NaN-Werte wurden durch den Spaltenmittelwert ersetzt. Dadurch soll verhindert werden, dass die fehlerhaften Zeilen keine starken Strömungen in den jeweiligen Kategorien geben.
 - Data Cropping: Die Zeilen mit NaN-Werten wurden gelöscht.
 
-Darüber hinaus haben wir unrealistische oder fehlerhaft erscheinende Extremwerte (Outliers) entfernt. Der erlaubte Wertebereich wurd hierbei durch ein Vielfaches der Standardabweichung bestimmt. Der jeweilige Faktor wurde für jede Klasse händisch ermittelt.
+Darüber hinaus haben wir unrealistische oder fehlerhaft erscheinende Extremwerte (Outliers) entfernt. Der erlaubte Wertebereich wurde hierbei durch ein Vielfaches der Standardabweichung bestimmt. Der jeweilige Faktor wurde für jede Klasse händisch ermittelt.
 
 Aufgrund des starken Ungleichgewichts in der Zielklasse, haben wir ausserdem Oversampling und Undersampling angewendet. Beide Verfahren dienen dazu, einen möglichst ausgeglichenen Trainingsdatensatz zu erhalten.
 
-- Undersampling: Aus dem Datensatz werden zufällig aus beiden Klassifikationen gleichviele Daten gewählt und als Trainingsdaten verwendet. Der Undersampling-Trainingsdatensatz hatte dementsprechend geringen Umfang.
-- Oversampling: Es werden sooft Daten der unterrepräsentierten Klasse kopiert und angefügt, bis ein Gleichgewicht eintritt. Der Oversampling-Datensatz war also in unserem Fall geringfügig größer.
+- Undersampling: Aus dem Datensatz werden zufällig aus beiden Klassifikationen gleichviele Daten gewählt und als Trainingsdaten verwendet. Der Undersampling-Trainingsdatensatz hatte dementsprechend einen geringen Umfang.
+- Oversampling: Es werden so oft Daten der unterrepräsentierten Klasse kopiert und angefügt, bis ein Gleichgewicht eintritt. Der Oversampling-Datensatz war also in unserem Fall geringfügig größer.
 
-Für das Over-/Undersampling haben wir die bereits im Data Cleaning behandelten Daten gewählt umd einen möglichs großen Satz an Trainingsdaten zu erhalten.
+Für das Over-/Undersampling haben wir die bereits im Data Cleaning behandelten Daten gewählt, um einen möglichst großen Satz an Trainingsdaten zu erhalten.
 
 #Erstellung der Modelle
 
-Im Folgenenden beschreiben wir die Modelle, welche wir für diese Aufgabe entwickelt haben. Die Ergebnisse wurden gleichermaßen nach Genauigkeit und ROC-AUC-Score bewertet.
+Im Folgenden beschreiben wir die Modelle, welche wir für diese Aufgabe entwickelt haben. Die Ergebnisse wurden gleichermaßen nach Genauigkeit und ROC-AUC-Score bewertet.
 
-Das jeweilige Model wurde jeweils zehn Mal trainiert und getestet. Bei Logistic Regression und Random Forest wurde jeweils auf drei Vierteln der Daten trainiert und auf dem verbleibenden Viertel getestet. Bei der Support Vector Machine wurden zum Training jedoch nur 1% der daten verwendet, da die Dauer des Trainings quadraitsch mit der Zahl der Samples skaliert und wir leider keine allzu leistungsfähigen Machinen zur Verfügung hatten.
+Das jeweilige Model wurde jeweils zehn Mal trainiert und getestet. Bei Logistic Regression und Random Forest wurde jeweils auf drei Vierteln der Daten trainiert und auf dem verbleibenden Viertel getestet. Bei der Support Vector Machine wurden zum Training jedoch nur 1% der Daten verwendet, da die Dauer des Trainings quadratisch mit der Zahl der Samples skaliert und wir leider keine allzu leistungsfähigen Maschinen zur Verfügung hatten.
 
 ##Logistic Regression
 
-Zunächst haben wir eine einfache Logistische Regression angewendet.
+Zunächst haben wir eine einfache Logistische Regression angewendet. Entgegen dem Namen handelt es sich dabei um eine Klassifikationsmethode und nicht um eine Regression, die abhängige und unabhängige Variablen in ihrem Verhältnis zueinander untersucht. Diese Generalisierung der linearen Regression wird verwendet, wenn die abhängige Zielvariable nicht stetig, sondern etwa binär ist, also nur zwei Zustände kennt. Dies ist bei unserer Untersuchung der Fall, da wir anhand verschiedener unabhängiger Variablen prognostizieren möchten, ob ein Kreditnehmer eine gute oder schlechte Zahlungsmoral hat. Die resultierende Wahrscheinlichkeit erlaubt eine Klassifizierung entlang einer Grenze von in der Regel 50 Prozent. Um die Genauigkeit besser einschätzen zu können, haben wir die Ergebnisse Kreuz-validiert.
 
 
  Trainingsdaten | Genauigkeit           | Area-Under-Curve 
@@ -233,6 +233,7 @@ Zunächst haben wir eine einfache Logistische Regression angewendet.
 
 ##Support Vector Machine
 
+Eine Support Vector Machine (SVM) ist ein Klassifizierer, der Daten entlang einer durch Training optimierten Hyperebene klassifiziert. Mit ihrer Hilfe lassen sich neue Beispiele klassifizieren. Sie zeichnet sich dadurch aus, dass ihre Ermittlung ein mathematisches Optimierungsproblem darstellt, bei dem der sogenannte Margin, also der minimale Abstand zwischen den geeigneten Trainingsdaten maximiert wird. Prinzipiell ist das Verfahren für höherdimensionale Probleme geiegnet, sollte aber auch Kreditkunden anhand weniger Features klassifizieren können.
 Das Modellieren mit der Support Vector Machine, in unserem Falle ein _Support Vector Classifier_, war äußerst zeitaufwändig. Aus diesem Grund haben wir auch zunächst die Standardparameter von SciKitLearn beibehalten. Ausserdem mussten wir eine Feature-Skalierung durchführen, da die SVM in aus SciKitLearn einen zentrierten Datensatz erwartet. Dies ließ sich aber mit dem zur Verfügung gestellten `StandardScaler` leicht bewerkstelligen.
 
 Da das Training mit der SVM so lang dauerte, haben wir eine GridSearch verwendet. GridSearch probiert alle Parameter in einem gegebenen Wertebereich iterativ aus und wählt dann diejenige SVM, die sich nach dem Scoring am besten geschlagen hat. 
@@ -250,6 +251,9 @@ Wir denken, dass ein Hauptgrund für die schlechte Performance der SVM die gerin
 
 ##Random Forest
 
+Ein Random Forest Klassifikator setzt sich stets aus mehreren unkorrelierten Entscheidungsbäumen zusammen. Diese unterscheiden sich in der Teilmenge der gewählten Features aus der Gesamtmenge und können parallel berehcnet werden, so dass sihc etwa zur SVM ein deutlicher Geschwindigkeitsvorteil beim Trainieren ergibt. Der optimale Entscheidungsbaum klassifiziert die Subjekte in den Werten seiner Endknoten mit der größten Zuverlässigkeit. Da in unserem Datensatz die Zahl der Features recht gering ist, droht kein Overfitting durch einen zu tiefen Baum, was das Verfahren für die Klassifizierung von Kreditkunden geeignet erscheinen lässt. 
+
+
  Trainingsdaten | Genauigkeit           | Area-Under-Curve 
 :---------------|----------------------:|-----------------: 
  Cleaned        |__0.93463729 (+/-0.00064)__|0.83709276 (+/-0.00154)
@@ -257,7 +261,7 @@ Wir denken, dass ein Hauptgrund für die schlechte Performance der SVM die gerin
  Undersampled   |0.76451742 (+/-0.00077)|0.84201142 (+/-0.00041)
  Oversampled    |0.69694936 (+/-0.00146)|__0.94609304 (+/-0.00057)__
 
-Zusätzlich gibt ein Random Forest auch eine Bewertung der Wichtigkeit der einzelnen Features an:
+Zusätzlich gibt ein Random Forest auch eine Bewertung der Wichtigkeit der einzelnen Features an, da er bei der Erstellung der Entscheidungsbäume alle Features nach ihrer Aussagekraft unterteilt, um die Baumknoten sinnvoll zu bilden.:
 
 ```
 feature importance:
