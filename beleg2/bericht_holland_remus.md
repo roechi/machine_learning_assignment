@@ -22,19 +22,73 @@ Die Zielklasse ist _SeriousDlqin2yrs_, welche Aussage darüber trifft, ob der Kr
 
 #Data Wrangling
 
+Die Beschaffenheit des Datensatzes hat uns vor ein paar Probleme gestellt. Zunächst lag für die als _cs-test.csv_ betitelten Daten keine Klassifikation vor, lediglich eine Beispieleinreichung mit Wahrscheinlichkeiten (_sampleEntry,csv_). Die Daten aus _cs-test.csv_ sollten also zur Erstellung einer Einreichung für die Leaderboards dienen. Dementsprechend mussten wir für Training und Validierung die 150000 Datensätze aus _cs-training.csv_ verwenden.
+
+Von diesen 150000 Datensätzen verfügten 29731 über NaN-Einträge. Für die Behandlung der betroffenen Zeilen haben wir zwei verschiedene Herangehensweisen gewählt:
+
+- Data Cleaning: die NaN-Werte wurden durch den Spaltenmittelwert ersetzt. Dadurch soll verhindert werden, dass die fehlerhaften Zeilen keine starken Strömungen in den jeweiligen Kategorien geben.
+- Data Cropping: Die Zeilen mit NaN-Werten wurden gelöscht.
+
+Darüber hinaus haben wir unrealistische oder fehlerhaft erscheinende Extremwerte (Outliers) entfernt. Der erlaubte Wertebereich wurd hierbei durch ein Vielfaches der Standardabweichung bestimmt. Der jeweilige Faktor wurde für jede Klasse händisch ermittelt.
+
+Aufgrund des starken Ungleichgewichts in der Zielklasse, haben wir ausserdem Oversampling und Undersampling angewendet. Beide Verfahren dienen dazu, einen möglichst ausgeglichenen Trainingsdatensatz zu erhalten.
+
+- Undersampling: Aus dem Datensatz werden zufällig aus beiden Klassifikationen gleichviele Daten gewählt und als Trainingsdaten verwendet. Der Undersampling-Trainingsdatensatz hatte dementsprechend geringen Umfang.
+- Oversampling: Es werden sooft Daten der unterrepräsentierten Klasse kopiert und angefügt, bis ein Gleichgewicht eintritt. Der Oversampling-Datensatz war also in unserem Fall geringfügig größer.
+
+Für das Over-/Undersampling haben wir die bereits im Data Cleaning behandelten Daten gewählt umd einen möglichs großen Satz an Trainingsdaten zu erhalten.
+
 #Erstellung der Modelle
 
+Im Folgenenden beschreiben wir die Modelle, welche wir für diese Aufgabe entwickelt haben. Die Ergebnisse wurden gleichermaßen nach Genauigkeit und ROC-AUC-Score bewertet.
+
 ##Logistic Regression
+
+Zunächst haben wir eine einfache Logistische Regression angewendet.
+
+
+ Trainingsdaten | Genauigkeit           | Area-Under-Curve 
+:---------------|----------------------:|-----------------------: 
+ Cleaned        |0.93345009 (+/-0.00045)|0.69582843 (+/-0.00290)
+ Cropped        |0.93118158 (+/-0.00032)|0.68944698 (+/-0.00207)
+ Undersampled   |      0,9332           |           0,6589 
+ Oversampled    |      0,9332           |           0,6589 
+
 ###Cross Validation
+
+ Trainingsdaten | Genauigkeit           | Area-Under-Curve 
+:---------------|-----------------------|-----------------------: 
+ Cleaned        |0.93310249 (+/-0.00036)|0.69631654 (+/-0.00178)
+ Cropped        |0.93024700 (+/-0.00039)|0.68822658 (+/-0.00157)
+ Undersampled   |      0,9332 |           0,6589 
+ Oversampled    |      0,9332 |           0,6589 
 
 ##Support Vector Machine
 
+Das Modellieren mit der Support Vector Machine, in unserem Falle ein _Support Vector Classifier_, war äußerst zeitaufwändig. Zudem bietet die SVM viel Spielraum für die Wahl der Hyperparameter, wie dem _Kernel_, dem Penalty-Parameter _C_ und dem Kernel-Koeffizienten _gamma_. Wir haben zunächst die Standardparameter von SciKitLearn beibehalten. Ausserdem mussten wir eine Feature-Skalierung durchführen, da die SVM in aus SciKitLearn einen zentrierten Datensatz erwartet. Dies ließ sich aber mit dem zur Verfügung gestellten `StandardScaler` leicht bewerkstelligen.
+
 ###Grid Search
 
+ Trainingsdaten | Genauigkeit | Area-Under-Curve 
+:---------------|------------:|-----------------: 
+ Cleaned        |      0,9332 |0.69885151 (+/-0.00110)
+ Cropped        |      0,9332 |           0,6589 
+ Undersampled   |      0,9332 |           0,6589 
+ Oversampled    |      0,9332 |           0,6589 
+
 ##Random Forest
+
+ Trainingsdaten | Genauigkeit | Area-Under-Curve 
+:---------------|------------:|-----------------: 
+ Cleaned        |      0,9332 |0.69885151 (+/-0.00110)
+ Cropped        |      0,9332 |           0,6589 
+ Undersampled   |      0,9332 |           0,6589 
+ Oversampled    |      0,9332 |           0,6589 
 
 #Performancevergleich der Modelle
 
 #Ergebnisse
+
+
 
 #Fazit
