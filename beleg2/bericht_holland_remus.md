@@ -17,52 +17,54 @@ Es liegen uns 150.000 Datensätze von Bankkunden vor. Diese umfassen neben versc
 
 Dafür analysieren wir den Datensatz erst einmal hinsichtlich bestimmter Auffälligkeiten und auch bezüglich der vorhandenen Datenqualität, führen also die sogenannte explorative Datenanalyse durch. Aus ihr ergeben sich idealerweise bereits erste Erkenntnisse, welche der Features besser als andere geeignet erschienen, um mit dem Ergebnis "Guter Kreditnehmer" oder "Risikoreicher Kreditnehmer" zu korrelieren. Anschließend wird auf Basis des ersten Punkts von uns der Datensatz optimiert. Ermittelte Schwachstellen werden wenn möglich kompensiert und Skalierungen so gewählt, dass bildliche Darstellungen, die sogenannten Plots eine möglichst hohe Aussagekraft beinhalten. Darauf folgt die Klassifikationsphase. In ihr werden wir geeignete Klassifikationsalgorithmen ermitteln und zur Anwendung bringen. Ergebnis soll ein Klassifikator sein, der den gewünschten Anforderungen, also einer hohen Trefferquote bei den Vorhersagen entspricht.  Eine Evaluation und ein Fazit schließen sich an.
 
-Der Datensatz entstammt der Web-Platform "www.kaggle.com" und dort dem bereits beendeten Wettbewerb "Give me some Credit" aus dem Jahr 2011. Ziel dieses Belegs ist es allerdings nicht, die Wettbewerbskriterien auf kaggle zu erfüllen. Uns geht es darum, die Mächtigkeit der Werkzeuge des Machinellen Lernens zu demonstrieren, um realwirtschaftliche Probleme zu erfassen. Da uns auf kaggle keine geeigneten Testdaten zur Verfügung stehen, in denen ebenfalls das Kreditausfallrisiko in einer Form gegeben ist, dass die erfolgreiche Anwendung eines geeigneten Klassifikators bewiesen werden kann, nutzen wir stattdessen randomisierte Datensätze aus den Trainingsdaten zur  Verifizierung unserer Arbeit.
+Der Datensatz entstammt der Web-Platform [www.kaggle.com](https://www.kaggle.com) und dort dem bereits beendeten Wettbewerb [_Give me some Credit_](https://www.kaggle.com/c/GiveMeSomeCredit) aus dem Jahr 2011. Ziel dieses Belegs ist es allerdings nicht, die Wettbewerbskriterien auf kaggle zu erfüllen. Uns geht es darum, die Mächtigkeit der Werkzeuge des Machinellen Lernens zu demonstrieren, um realwirtschaftliche Probleme zu erfassen. Da uns auf kaggle keine geeigneten Testdaten zur Verfügung stehen, in denen ebenfalls das Kreditausfallrisiko in einer Form gegeben ist, dass die erfolgreiche Anwendung eines geeigneten Klassifikators bewiesen werden kann, nutzen wir stattdessen randomisierte Datensätze aus den Trainingsdaten zur  Verifizierung unserer Arbeit.
 
 #Explorative Datenanalyse
 In den vorliegenden Daten finden primär zehn Features Verwendung, die die Bankkunden erfassen helfen und schließlich analysierbar machen:
 
 ##Berschreibung der Features
 
-**`RevolvingUtilizationOfUnsecuredLines`**
+###`RevolvingUtilizationOfUnsecuredLines`
 
 Dieser Prozentwert gibt an, inwiefern eine Person ihre Kreditkarte oder ihren Kreditrahmen tatsächlich in Anspruch nimmt, geteilt durch die Summe der Kreditlimits. Immobilien- und Sachkredite werden dabei nicht berücksichtigt.
 
-**`age`**
+###`age`
 
 Das Alter der Bankkunden in Jahren, ein ganzzahliger Wert.
 
-**`NumberOfTime30-59DaysPastDueNotWorse`**
+###`NumberOfTime30-59DaysPastDueNotWorse`
 
 Ein ganzzahliger Wert, der angibt, wie oft ein Bankkunde innerhalb der zwei vorangegangenen Jahre 30 bis 59 Tage mit einer Ratenzahlung in Verzug geraten ist.
 
-**`NumberOfTime60-89DaysPastDueNotWorse`**
+###`NumberOfTime60-89DaysPastDueNotWorse`
 
 Ein ganzzahliger Wert, der angibt, wie oft ein Bankkunde innerhalb der zwei vorangegangenen Jahre 60 bis 89 Tage mit einer Ratenzahlung in Verzug geraten ist.
 
-**`NumberOfTimes90DaysLate`**
+###`NumberOfTimes90DaysLate`
 
 Ein ganzzahliger Wert, der angibt, wie oft ein Bankkunde innerhalb der zwei vorangegangenen Jahre mindestens 90 Tage mit einer Ratenzahlung in Verzug geraten ist.
 
-**`MonthlyIncome`**
+###`MonthlyIncome`
 
 Ein float-Wert, der das regelmäßige monatliche Einkommen des Bankkunden beschreibt.
 
-**`DebtRatio`**
+###`DebtRatio`
 
 Ein Prozentwert der das Verhältnis von Tilgungszahlungen, Unterhaltsverpflichtungen und Lebenshaltungskosten im Vergleich zum monatlichen Bruttoeinkommen angibt.
 
-**`NumberOfOpenCreditLinesAndLoans`**
+###`NumberOfOpenCreditLinesAndLoans`
 
 Ganzzahliger Wert, der die Anzahl offener Kredite und Darlehen, sowie Kreditkarten aufsummiert.
 
-**`NumberRealEstateLoansOrLines`**
+###`NumberRealEstateLoansOrLines`
 
 Ein ganzzahliger Wert, der Kredite und Darlehen im Zusammenhang mit einer Wohnimmobilie zusammenfasst.
 
-**`NumberOfDependents`**
+###`NumberOfDependents`
 
 Die Summe der festen Haushaltsmitglieder des Bankkunden.
+
+###`SeriousDlqin2yrs`
 
 Ein elftes Feature stellt **`SeriousDlqin2yrs`** dar. Es handelt sich dabei um einen Binärwert, der die Datenmenge aufteilt in Personen mit bereits bewiesenen erheblichen Zahlungsschwierigkeiten und solche ohne. Dies stellt auch die Zielklasse für die Klassifikation dar.
 
@@ -98,14 +100,14 @@ Ein Histogramm dieser Personengruppe zeigt noch einmal deutlich, wie klein der A
 
 ##Explorative Analyse der relevanten einzelnen Features
 
-**RevolvingUtilizationOfUnsecuredLines**
+###RevolvingUtilizationOfUnsecuredLines
 
 ![](img/output_16_1.png-scaled.png)![](img/output_17_1.png-scaled.png)
 
 Bei diesem Feature ist der Input in einem Intervall von null bis zwei zu sehen. Dieses Intervall wurde auch aufgrund von Ausreißern gewählt. Es zeigt sich, dass die meisten Werte zwischen null und eins liegen, während die darüberlegenden Einträge anzeigen, dass die Kreditlimits überzogen wurden. Es lässt sich bereits an dieser Stelle der explorativen Analyse festhalten, dass es eine hohe Korrelation zwischen einem hohen Wert dieses Features und unserem Zielwert, den Ratenzahlungsproblemen, gibt.
 
 
-**DebtRatio**
+###DebtRatio
 
 ![](img/output_22_1.png-scaled.png)![](img/output_23_1.png-scaled.png)
 
@@ -124,7 +126,7 @@ Als Ergänzung zu den Plots ergibt die Berechnung von Mittel- und Medianwerten e
     Median: 0.344811491
 ```
 
-**MonthlyIncome**
+###MonthlyIncome
 
 ![Verteilung von MonthlyIncome](img/output_35_1.png-scaled.png)\
 
@@ -146,13 +148,13 @@ Betrachten wir aber Modalwert, Mittelwert und Median
 
 Wird es recht deutlich, dass ein geringeres Einkommen auf ein höheres Risiko hinweist.
 
-**Age**
+###Age
 
 ![Verteilung Age](img/output_39_1.png-scaled.png)\
 
 Annähernd normal-verteilt sieht es beim Feature Age aus.  Bei genauerer In der Altersgruppe der 40- bis 60-Järhigen zeigt der Plot, dass trotz ähnlich hoher Zahl der Alterskohorten die jüngeren Kunden eher zu Zahlungsschwierigkeiten neigen. Vielleicht sind sie Risiko-freudiger als die älteren Bankkunden.
 
-**Payment Delays**
+###Payment Delays
 
 Unter Payment Delays lassen sich drei ausgesprochen ähnliche Features zusammenfassen. Sie entstammen einem Feature, den Zahlungsproblemen, und wurden in drei Kohorten aufgeteilt. Sie beschreiben alle de Häufigkeit von Zahlungsverspätungen der Bankkunden und unterscheiden sich nur nach der Art der Verspätung (kürzerer oder längerer Zeitraum). Für die Bank sind dabei die Kunden mit den gravierendsten Zahlungsproblemen am schwierigsten zu managen. 
 
@@ -164,13 +166,13 @@ Unter Payment Delays lassen sich drei ausgesprochen ähnliche Features zusammenf
 
 Die Daten zeigen wenig überraschend, dass Kreditnehmer mit bedeutenden Zahlungsschwierigkeiten tendenziell auch ein Ausfallrisiko darstellen. Man könnte auch interpretieren, dass Personen, die immer wieder Zahlungsprobleme haben, schlecht mit ihrem Geld umgehen können.
 
-**NumberRealEstateLoansOrLines**
+###NumberRealEstateLoansOrLines
 
 ![](img/output_57_1.png-scaled.png)![](img/output_58_1.png-scaled.png)
 
-Die Plots zeigen erwartbare Ergebnisse. Die Zahl der Menschen, die viele Kredite im Zusammenhang mit ihrer Immobilie bedienen müssen ist recht begrenzt. Da mit jeder Hypothek ein Anteil an der Immobilie an die Bank überschieben wird, ist ihre Anzahl beschränkt durch den Wert der Immobilie. Die Berechnung von Mittel- und Medianwerten zeigt allerdings eine nicht sofort erklärbare Verschiebung. (RICHARD???????)
+Die Plots zeigen erwartbare Ergebnisse. Die Zahl der Menschen, die viele Kredite im Zusammenhang mit ihrer Immobilie bedienen müssen ist recht begrenzt. Da mit jeder Hypothek ein Anteil an der Immobilie an die Bank überschieben wird, ist ihre Anzahl beschränkt durch den Wert der Immobilie.
 
-**NumberOfDependents**
+###NumberOfDependents
 
 ![](img/output_63_1.png-scaled.png)![](img/output_64_1.png-scaled.png)
 
@@ -206,14 +208,13 @@ Für das Over-/Undersampling haben wir die bereits im Data Cleaning behandelten 
 
 #Erstellung der Modelle
 
-Im Folgenden beschreiben wir die Modelle, welche wir für diese Aufgabe entwickelt haben. Die Ergebnisse wurden gleichermaßen nach Genauigkeit und ROC-AUC-Score bewertet.
+Im Folgenden beschreiben wir die Modelle, welche wir für diese Aufgabe entwickelt haben. Die Ergebnisse wurden gleichermaßen nach Genauigkeit und ROC-AUC-Score (Fläche unter der Receiver Operating Curve) bewertet.
 
-Das jeweilige Model wurde jeweils zehn Mal trainiert und getestet. Bei Logistic Regression und Random Forest wurde jeweils auf drei Vierteln der Daten trainiert und auf dem verbleibenden Viertel getestet. Bei der Support Vector Machine wurden zum Training jedoch nur 1% der Daten verwendet, da die Dauer des Trainings quadratisch mit der Zahl der Samples skaliert und wir leider keine allzu leistungsfähigen Maschinen zur Verfügung hatten.
+Das jeweilige Model wurde jeweils zehn Mal trainiert und getestet und der Mittelwert und der Standardfehler der Genauigkeit und der AUC ermittelt. Bei Logistic Regression und Random Forest wurde jeweils auf drei Vierteln der Daten trainiert und auf dem verbleibenden Viertel getestet. Bei der Support Vector Machine wurden zum Training jedoch nur 1% der Daten verwendet, da die Dauer des Trainings quadratisch mit der Zahl der Samples skaliert und wir leider keine allzu leistungsfähigen Maschinen zur Verfügung hatten.
 
 ##Logistic Regression
 
-Zunächst haben wir eine einfache Logistische Regression angewendet. Entgegen dem Namen handelt es sich dabei um eine Klassifikationsmethode und nicht um eine Regression, die abhängige und unabhängige Variablen in ihrem Verhältnis zueinander untersucht. Diese Generalisierung der linearen Regression wird verwendet, wenn die abhängige Zielvariable nicht stetig, sondern etwa binär ist, also nur zwei Zustände kennt. Dies ist bei unserer Untersuchung der Fall, da wir anhand verschiedener unabhängiger Variablen prognostizieren möchten, ob ein Kreditnehmer eine gute oder schlechte Zahlungsmoral hat. Die resultierende Wahrscheinlichkeit erlaubt eine Klassifizierung entlang einer Grenze von in der Regel 50 Prozent. Um die Genauigkeit besser einschätzen zu können, haben wir die Ergebnisse Kreuz-validiert.
-
+Zunächst haben wir eine einfache Logistische Regression angewendet. Entgegen dem Namen handelt es sich dabei um eine Klassifikationsmethode und nicht um eine Regression, die abhängige und unabhängige Variablen in ihrem Verhältnis zueinander untersucht. Diese Generalisierung der linearen Regression wird verwendet, wenn die abhängige Zielvariable nicht stetig, sondern etwa binär ist, also nur zwei Zustände kennt. Dies ist bei unserer Untersuchung der Fall, da wir anhand verschiedener unabhängiger Variablen prognostizieren möchten, ob ein Kreditnehmer eine gute oder schlechte Zahlungsmoral hat. Die resultierende Wahrscheinlichkeit erlaubt eine Klassifizierung entlang einer Grenze von in der Regel 50 Prozent.
 
  Trainingsdaten | Genauigkeit           | Area-Under-Curve 
 :---------------|----------------------:|-----------------------: 
@@ -223,6 +224,8 @@ Zunächst haben wir eine einfache Logistische Regression angewendet. Entgegen de
  Oversampled    |0.70956608 (+/-0.00710)|__0.78795195 (+/-0.00388)__
 
 ###Cross Validation
+
+Um die Genauigkeit besser einschätzen zu können, haben wir die Ergebnisse 10-fach Kreuzvalidiert.
 
  Trainingsdaten | Genauigkeit           | Area-Under-Curve 
 :---------------|-----------------------|-----------------------: 
@@ -234,7 +237,7 @@ Zunächst haben wir eine einfache Logistische Regression angewendet. Entgegen de
 ##Support Vector Machine
 
 Eine Support Vector Machine (SVM) ist ein Klassifizierer, der Daten entlang einer durch Training optimierten Hyperebene klassifiziert. Mit ihrer Hilfe lassen sich neue Beispiele klassifizieren. Sie zeichnet sich dadurch aus, dass ihre Ermittlung ein mathematisches Optimierungsproblem darstellt, bei dem der sogenannte Margin, also der minimale Abstand zwischen den geeigneten Trainingsdaten maximiert wird. Prinzipiell ist das Verfahren für höherdimensionale Probleme geiegnet, sollte aber auch Kreditkunden anhand weniger Features klassifizieren können.
-Das Modellieren mit der Support Vector Machine, in unserem Falle ein _Support Vector Classifier_, war äußerst zeitaufwändig. Aus diesem Grund haben wir auch zunächst die Standardparameter von SciKitLearn beibehalten. Ausserdem mussten wir eine Feature-Skalierung durchführen, da die SVM in aus SciKitLearn einen zentrierten Datensatz erwartet. Dies ließ sich aber mit dem zur Verfügung gestellten `StandardScaler` leicht bewerkstelligen.
+Das Modellieren mit der Support Vector Machine, in unserem Falle ein _Support Vector Classifier_, war äußerst zeitaufwändig. Aus diesem Grund haben wir auch zunächst die Standardparameter von SciKitLearn beibehalten. Ausserdem mussten wir eine Feature-Skalierung durchführen, da die SVM in SciKitLearn einen zentrierten Datensatz erwartet. Dies ließ sich aber mit dem zur Verfügung gestellten `StandardScaler` leicht bewerkstelligen.
 
 Da das Training mit der SVM so lang dauerte, haben wir eine GridSearch verwendet. GridSearch probiert alle Parameter in einem gegebenen Wertebereich iterativ aus und wählt dann diejenige SVM, die sich nach dem Scoring am besten geschlagen hat. 
 
@@ -248,6 +251,8 @@ Da das Training mit der SVM so lang dauerte, haben wir eine GridSearch verwendet
  Oversampled    |0.61334848 (+/-0.00000)|0.66289212 (+/-0.00000)
 
 Wir denken, dass ein Hauptgrund für die schlechte Performance der SVM die geringe Trainingsmenge ist. Als wir versuchsweise die Zahl der Samples iterativ erhöhten, ließ sich eine leichte Verbesserung in Genauigkeit und AUC-Score erkennen. Da dabei aber, wie schon erwähnt, die Rechenzeit quadratisch ansteigt, ist dieses Verfahren in unserem Falle jedoch äußerst unpraktikabel.
+
+Ausserdem nutzten wir für den AUC-Score die Wahrscheinlichkeiten des jeweiligen Estimators. SVMs sind eigentlich nicht dafür ausgelegt Wahrscheinlichkeiten zu bestimmen, das Feature ist in SciKitLearn dennoch mittels 5-facher Kreuz-Validierung implementiert. Dadurch dauerte die erstellung des Modells noch länger.
 
 ##Random Forest
 
@@ -282,14 +287,16 @@ Diese sind also:
 9. NumberRealEstateLoansOrLines
 10. NumberOfDependents
 
-Diese Ergebnisse sind wenig überraschend.
+Wenig überraschend sind die Kreditbelastung und die Belastung des monatlichen Guthabens von höchster Wichtigkeit. Das Alter spielt doch eine größere Rolle als wir dachten. 
 
-#Performancevergleich der Modelle
+Als wir das unwichtigste Feature testweise ausgelassen haben, hat sich dies sofort schlecht auf den Random Forest Classifier ausgewirkt. Wir denken daher, dass der Feature-Raum der Ausgangsdaten schon auf das wesentliche beschränkt war. 
+
+#Performancevergleich und Ergebnisse
 
 Zunächst wollten wir uns nur auf das Genauigkeitsmaß beschränken, welches sich mit bei den jeweiligen Klassifikatoren in SciKitLearn leicht ermitteln läßt. Der ursprüngliche Wettbewerb auf [kaggle.com](https://www.kaggle.com/c/GiveMeSomeCredit) wurde jedoch nach der _Area Under Curve_ (AUC) der Receiver _Operating Characteristic_ bewertet. Deshalb haben wir uns entschieden, beide Metriken in den Vergleich aufzunehmen. 
 
 Tatsächlich scheint die Bewertung nach ROC-AUC auch das bessere Mass zu sein (siehe [Huang et. al. - Using AUC and Accuracy in Evaluating Learning Algorithms
-](http://www.cs.ust.hk/~qyang/537/Papers/AUC-evaluation.pdf)). 
+](http://www.cs.ust.hk/~qyang/537/Papers/AUC-evaluation.pdf)). Sie stellt die Richtig-Positiv-Rate gegen die Falsch-Positiv-Rate dar. 
 
 Bei den Verfahren Random Forest und Logistic Regression haben wir zwar zunächst verschiedene Parameter ausprobiert, einen signifikanten Leistungsunterschied konnten wir jedoch eher bei den verschiedenen Formen der Trainingsdaten erkennen. Deshalb haben wir die Standardparameter beibehalten. 
 Eine GridSearch für diese beiden Klassifikatoren könnte die Ergebnisse eventuell noch verbessern, jedoch haben wir am Beispiel der Support Vector Machine schon gemerkt, dass dieser Unterschied sehr gering ausfallen kann. GridSearch ist ebenfalls ein sehr zeitaufwändiges Verfahren.
@@ -303,10 +310,17 @@ Die Rangfolge der Klassifikatoren, geordnet nach bester Vorhersage, gestaltet si
 Der Random Forest passt mit Abstand am bestena auf die zugrunde liegenden Daten. Er hat sowohl nach Genauigkeit als auch nach AUC-Score deutlich am besten abgeschnitten.
 
 Die Logistische Regression und die SVM müssten sich eigentlich den zweiten Platz teilen, wenn es nach dem Scoring geht, da die Logistische Regression den höheren AUC-Score hat, aber die SVM genauer ist. Nach anderen Eigenschaften ist die Logistische Regression aber besser:
+
 - wir denken der AUC-Score trifft eine bessere Aussage über die Klassifikationsfähigkeit 
 - sie ist deutlich schneller 
 
-#Ergebnisse
+Speziell für die Bestimmung von Klassifikationswahrscheinlichkeiten sind SVMs eher unbrauchbar, wenngleich sie bei der reinen Klassifikation recht genau sind.
+
+Wir haben bei allen Modellen die volle Zahl der vorhandenen Features genutzt. Das weglassen von anscheinend weniger wichtigen Features hat sich schlecht auf die Vorhersagefähigkeit der Klassifikatoren ausgewirkt. Die Auswahl der gegebenen Features scheint auf das wesentliche beschränkt zu sein. Jedoch könnte eine Hinzunahme anderer Merkmale, wie zum Beispiel die Art und auch die bisherige Dauer des Anstellungsverhältnisses der Klienten von Vorteil sein.
+
+Betrachten wir die Vorverarbeitung der Trainingsdaten, fällt auf, dass die Genauigkeit auf dem bereinigten Datensatz am höchsten war. Für den AUC-Score war es jedoch besser, wenn die Daten durch Over- oder Undersampling in ein Gleichgewicht gebracht wurden.
+
+Für den Anwendungsfall empfehlen wir einen Random Forest Classifier mit 100 Bäumen auf einem bereinigten Datensatz, d.h. die Fehldaten werden durch den Spaltenmittelwert ersetzt und Aussreisser durch ein passendes Vielfaches der Standardabweichung ausgegrenzt.
 
 #Fazit
 
