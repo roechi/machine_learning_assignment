@@ -296,7 +296,7 @@ Als wir das unwichtigste Feature testweise ausgelassen haben, hat sich dies sofo
 Zunächst wollten wir uns nur auf das Genauigkeitsmaß beschränken, welches sich mit bei den jeweiligen Klassifikatoren in SciKitLearn leicht ermitteln läßt. Der ursprüngliche Wettbewerb auf [kaggle.com](https://www.kaggle.com/c/GiveMeSomeCredit) wurde jedoch nach der _Area Under Curve_ (AUC) der Receiver _Operating Characteristic_ bewertet. Deshalb haben wir uns entschieden, beide Metriken in den Vergleich aufzunehmen. 
 
 Tatsächlich scheint die Bewertung nach ROC-AUC auch das bessere Mass zu sein (siehe [Huang et. al. - Using AUC and Accuracy in Evaluating Learning Algorithms
-](http://www.cs.ust.hk/~qyang/537/Papers/AUC-evaluation.pdf)). Sie stellt die Richtig-Positiv-Rate gegen die Falsch-Positiv-Rate dar. 
+](http://www.cs.ust.hk/~qyang/537/Papers/AUC-evaluation.pdf)). Sie stellt die Richtig-Positiv-Rate und die Falsch-Positiv-Rate für alle möglichen Entscheidungsgrenzen gegenüber. Im Gegensatz dazu bewertet die Genaugkeit nur, wieviele korrekte Klassifikationen mit einer fixen Entscheidungsgrenze durchgeführt wurden. Die Bewertung mit AUC-Score ist also sehr viel allgemeiner.
 
 Bei den Verfahren Random Forest und Logistic Regression haben wir zwar zunächst verschiedene Parameter ausprobiert, einen signifikanten Leistungsunterschied konnten wir jedoch eher bei den verschiedenen Formen der Trainingsdaten erkennen. Deshalb haben wir die Standardparameter beibehalten. 
 Eine GridSearch für diese beiden Klassifikatoren könnte die Ergebnisse eventuell noch verbessern, jedoch haben wir am Beispiel der Support Vector Machine schon gemerkt, dass dieser Unterschied sehr gering ausfallen kann. GridSearch ist ebenfalls ein sehr zeitaufwändiges Verfahren.
