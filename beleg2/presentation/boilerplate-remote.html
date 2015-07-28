@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Machine Learning: Kreditvergabe (Holland/Remus)</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style type="text/css">
+      @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(http://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(http://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { 
+        font-family: 'Droid Serif';
+        font-size: 30px; 
+      }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: normal;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+# Machine Learning: Kreditvergabe Holland/Remus
+
+---
+
+# Agenda
+
+1. Aufgabenstellung und Vorgehen
+2. Explorative Datenanalyse
+3. Data Wrangling
+4. Erstellung der Modelle
+5. Performancevergleich
+6. Fazit
+
+???
+
+---
+
+# Aufgabenstellung 
+
+- Datensatz www.kaggle.com/c/GiveMeSomeCredit
+- 250.000 Zeilen
+- 10 Features + Zielklasse
+- Prognose: Tilgungsprobleme
+
+---
+
+#  Vorgehen
+
+- Explorative Analyse
+- Suche nach Optimierungsmöglichkeiten
+- unwichtige Features?
+- Klassifikatoren trainieren / testen
+
+---
+
+# Explorative Datenanalyse
+## Features
+
+- RevolvingUtilizationOfUnsecuredLines
+- DebtRatio
+- MonthlyIncome
+- age
+- NumberOfOpenCreditLinesAndLoans
+- NumberOfTimes90DaysLate
+- NumberOfTime30-59DaysPastDueNotWorse
+- NumberOfTime60-89DaysPastDueNotWorse
+- NumberRealEstateLoansOrLines
+- NumberOfDependents
+- SeriousDlqin2yrs (Zielklasse)
+
+---
+
+# Datenkonsistenz
+ von 250.000 nur 150.000 als Trainings- und Testdaten
+```
+    SeriousDlqin2yrs:                           0
+    RevolvingUtilizationOfUnsecuredLines:       0
+    age:                                        0
+    NumberOfTime30-59DaysPastDueNotWorse:       0
+    DebtRatio:                                  0
+    MonthlyIncome:                          29731
+    NumberOfOpenCreditLinesAndLoans:            0
+    NumberOfTimes90DaysLate:                    0
+    NumberRealEstateLoansOrLines:               0
+    NumberOfTime60-89DaysPastDueNotWorse:       0
+    NumberOfDependents:                      3924
+```
+
+---
+
+# Auffällige Features
+
+.center[![](../img/output_10_1.png)]
+
+---
+
+![](../img/output_16_1.png-scaled.png)![](../img/output_17_1.png-scaled.png)
+
+---
+
+![](../img/output_23_1.png-scaled.png)
+```
+    non-distressed
+    Mode: 0.0
+    Mean: 0.330567992607
+    Median: 0.281137754
+    distressed
+    Mode: 0.0
+    Mean: 0.411282121894
+    Median: 0.344811491
+```
+
+---
+
+![Verteilung von MonthlyIncome](../img/output_35_1.png-scaled.png)
+```
+    non-distressed
+    Mode: 5000.0
+    Mean: 6072.24517793
+    Median: 5399.0
+    distressed
+    Mode: 3000.0
+    Mean: 5186.20507528
+    Median: 4470.5
+```
+---
+
+.center[![Verteilung Age](../img/output_39_1.png-scaled.png)]
+.center[![](../img/output_58_1.png-scaled.png)]
+---
+
+# Data Wrangling
+
+- Wie gehen wir mit Fehldaten um?
+  + Spaltenmittelwert einsetzen
+  + wegwerfen
+
+- Ungleichmäßige Verteilung der Zielklasse
+  + Undersampling
+  + Oversampling
+
+???
+
+- Cleaned und Cropped sind eigene Terminologie
+
+---
+
+# Erstellung der Modelle
+
+- Logistic Regression
+  + Crossvalidation
+
+- Support Vector Machine
+  + GridSearch
+
+- Random Forest
+
+---
+
+# Performancevergleich
+## Logistic Regression 
+ Trainingsset | Genauigkeit           | Area-Under-Curve 
+:---------------|----------------------:|-----------------------: 
+ Cleaned        |__0.93310249__|0.69631654
+ Cropped        |0.93024700|0.68822658
+ Undersampled   |0.71425711|0.79303525
+ Oversampled    |0.72424625|__0.80381864__
+
+---
+
+# Performancevergleich
+## Support Vector Machine 
+
+ Trainingsset | Genauigkeit           | Area-Under-Curve 
+:---------------|----------------------:|-----------------: 
+ Cleaned        |__0.93310601__|0.69885151
+ Cropped        |0.93050522|0.49841584
+ Undersampled   |0.50634576|__0.72650176__
+ Oversampled    |0.61334848|0.66289212
+
+---
+
+# Performancevergleich
+## Random Forest
+
+ Trainingsset |     Genauigkeit       | Area-Under-Curve 
+:---------------|----------------------:|-----------------: 
+ Cleaned        | __0.93463729__ | 0.83709276
+ Cropped        | 0.93243658 | 0.81987760
+ Undersampled   | 0.76451742 | 0.84201142
+ Oversampled    | 0.69694936 | __0.94609304__
+
+---
+
+# Ranking der Modelle
+Modell    |Beste Genauigkeit | Bester AUC-Score
+:--------|--------:|------:
+Random Forest | __0.93463729__ | __0.94609304__
+Logistic Regression | 0.93310249 | 0.80381864
+Support Vector Machine | 0.93310601 | 0.72650176
+
+???
+
+- Beste Genauigkeit bei allen auf Cleaned
+- Bester AUC-Score
+  + Logistic Regression, Random Forest auf Oversampled
+  + SVM auf Undersampled
+
+---
+
+Bester Kompromiss
+
+ Modell |     Genauigkeit       | Area-Under-Curve 
+:---------------|----------------------:|-----------------:
+Random Forest |  0.93463729 | 0.83709276
+
+- auf bereinigten Daten
+
+???
+
+- "bereinigt" soll hier also bedeuten, dass die Fehlwerte durch die Spaltenmittelwerte ersetzt wurden 
+
+---
+
+#Fazit
+
+---
+
+    </textarea>
+    <script src="http://gnab.github.io/remark/downloads/remark-0.5.9.min.js" type="text/javascript">
+    </script>
+    <script type="text/javascript">
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>

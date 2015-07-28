@@ -228,7 +228,7 @@ Zunächst haben wir eine einfache Logistische Regression angewendet. Entgegen de
 Um die Genauigkeit besser einschätzen zu können, haben wir die Ergebnisse 10-fach Kreuzvalidiert.
 
  Trainingsdaten | Genauigkeit           | Area-Under-Curve 
-:---------------|-----------------------|-----------------------: 
+:---------------|----------------------:|-----------------------: 
  Cleaned        |__0.93310249 (+/-0.00036)__|0.69631654 (+/-0.00178)
  Cropped        |0.93024700 (+/-0.00039)|0.68822658 (+/-0.00157)
  Undersampled   |0.71425711 (+/-0.00286)|0.79303525 (+/-0.00286)
