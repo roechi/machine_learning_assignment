@@ -1,7 +1,7 @@
 % Projekt-Bericht und Dokumentation im Kurs Ausgewählte Kapitel sozialer Webtechnologien (SoSe15) 
     "Machine Learning am Beispiel Kreditvergabe"
 % Claus Holland; Richard Remus
-% 28. Juli 2015
+% 2. August 2015
 
 
 
@@ -17,7 +17,7 @@ Es liegen uns 150.000 Datensätze von Bankkunden vor. Diese umfassen neben versc
 
 Dafür analysieren wir den Datensatz erst einmal hinsichtlich bestimmter Auffälligkeiten und auch bezüglich der vorhandenen Datenqualität, führen also die sogenannte explorative Datenanalyse durch. Aus ihr ergeben sich idealerweise bereits erste Erkenntnisse, welche der Features besser als andere geeignet erscheinen, um mit dem Ergebnis "Guter Kreditnehmer" oder "Risikoreicher Kreditnehmer" zu korrelieren. Anschließend wird auf Basis des ersten Punkts von uns der Datensatz optimiert. Ermittelte Schwachstellen werden wenn möglich kompensiert und Skalierungen so gewählt, dass bildliche Darstellungen, die sogenannten Plots, eine möglichst hohe Aussagekraft beinhalten. Darauf folgt die Klassifikationsphase. In ihr werden wir geeignete Klassifikationsalgorithmen ermitteln und zur Anwendung bringen. Ergebnis soll ein Klassifikator sein, der den gewünschten Anforderungen, also einer hohen Trefferquote bei den Vorhersagen, entspricht. Eine Evaluation und ein Fazit schließen sich an.
 
-Der Datensatz entstammt der Web-Platform [www.kaggle.com](https://www.kaggle.com) und dort dem bereits beendeten Wettbewerb [_Give me some Credit_](https://www.kaggle.com/c/GiveMeSomeCredit) aus dem Jahr 2011. Ziel dieses Belegs ist es allerdings nicht, die Wettbewerbskriterien auf kaggle zu erfüllen. Uns geht es darum, die Mächtigkeit der Werkzeuge des Machinellen Lernens zu demonstrieren, um realwirtschaftliche Probleme zu erfassen. Da uns auf kaggle keine geeigneten Testdaten zur Verfügung stehen, in denen ebenfalls das Kreditausfallrisiko in einer Form gegeben ist, so dass die erfolgreiche Anwendung eines geeigneten Klassifikators bewiesen werden kann, nutzen wir stattdessen randomisierte Datensätze aus den Trainingsdaten zur Verifizierung unserer Arbeit.
+Der Datensatz entstammt der Web-Platform [www.kaggle.com](https://www.kaggle.com) und dort dem bereits beendeten Wettbewerb [_Give me some Credit_](https://www.kaggle.com/c/GiveMeSomeCredit) [@kaggle] aus dem Jahr 2011. Ziel dieses Belegs ist es allerdings nicht, die Wettbewerbskriterien auf kaggle zu erfüllen. Uns geht es darum, die Mächtigkeit der Werkzeuge des Machinellen Lernens zu demonstrieren, um realwirtschaftliche Probleme zu erfassen. Da uns auf kaggle keine geeigneten Testdaten zur Verfügung stehen, in denen ebenfalls das Kreditausfallrisiko in einer Form gegeben ist, so dass die erfolgreiche Anwendung eines geeigneten Klassifikators bewiesen werden kann, nutzen wir stattdessen randomisierte Datensätze aus den Trainingsdaten zur Verifizierung unserer Arbeit.
 
 #Explorative Datenanalyse
 In den vorliegenden Daten finden primär zehn Features Verwendung, die die Bankkunden erfassen helfen und schließlich analysierbar machen:
@@ -146,7 +146,7 @@ Betrachten wir aber Modalwert, Mittelwert und Median
     Median: 4470.5
 ```
 
-Wird es recht deutlich, dass ein geringeres Einkommen auf ein höheres Risiko hinweist.
+wird es recht deutlich, dass ein geringeres Einkommen auf ein höheres Risiko hinweist.
 
 ###Age
 
@@ -210,18 +210,11 @@ Für das Over-/Undersampling haben wir die bereits im Data Cleaning behandelten 
 
 Im Folgenden beschreiben wir die Modelle, welche wir für diese Aufgabe entwickelt haben. Die Ergebnisse wurden gleichermaßen nach Genauigkeit und ROC-AUC-Score (Fläche unter der Receiver Operating Curve) bewertet.
 
-Das jeweilige Model wurde jeweils zehn Mal trainiert und getestet und der Mittelwert und der Standardfehler der Genauigkeit und der AUC ermittelt. Bei Logistic Regression und Random Forest wurde jeweils auf drei Vierteln der Daten trainiert und auf dem verbleibenden Viertel getestet. Bei der Support Vector Machine wurden zum Training jedoch nur ein Prozesnt der Daten verwendet, da die Dauer des Trainings quadratisch mit der Zahl der Samples skaliert und wir leider keine allzu leistungsfähigen Maschinen zur Verfügung hatten.
+Die Modelle wurden jeweils einer 10-Fold Cross Validation unterzogen und der Mittelwert und der Standardfehler der Genauigkeit und der AUC ermittelt. Bei der Support Vector Machine wurden zum Training jedoch nur fünf Prozent der Daten verwendet, da die Dauer des Trainings quadratisch mit der Zahl der Samples skaliert und wir leider keine allzu leistungsfähigen Maschinen zur Verfügung hatten.
 
 ##Logistic Regression
 
-Zunächst haben wir eine einfache Logistische Regression angewendet. Entgegen dem Namen handelt es sich dabei um eine Klassifikationsmethode und nicht um eine Regression, die abhängige und unabhängige Variablen in ihrem Verhältnis zueinander untersucht (Herta 2013, S. 10). Diese Generalisierung der linearen Regression wird verwendet, wenn die abhängige Zielvariable nicht stetig, sondern etwa binär ist, also nur zwei Zustände kennt (Fromm, 2005, S.5). Dies ist bei unserer Untersuchung der Fall, da wir anhand verschiedener unabhängiger Variablen prognostizieren möchten, ob ein Kreditnehmer eine gute oder schlechte Zahlungsmoral hat. Die resultierende Wahrscheinlichkeit erlaubt eine Klassifizierung entlang einer Grenze von in der Regel 50 Prozent.
-
- Trainingsdaten | Genauigkeit           | Area-Under-Curve 
-:---------------|----------------------:|-----------------------: 
- Cleaned        |__0.93345009 (+/-0.00045)__|0.69582843 (+/-0.00290)
- Cropped        |0.93118158 (+/-0.00032)|0.68944698 (+/-0.00207)
- Undersampled   |0.68908690 (+/-0.00364)|0.76162387 (+/-0.00377)
- Oversampled    |0.70956608 (+/-0.00710)|__0.78795195 (+/-0.00388)__
+Zunächst haben wir eine einfache Logistische Regression angewendet. Entgegen dem Namen handelt es sich dabei um eine Klassifikationsmethode und nicht um eine Regression, die abhängige und unabhängige Variablen in ihrem Verhältnis zueinander untersucht [@Herta]. Diese Generalisierung der linearen Regression wird verwendet, wenn die abhängige Zielvariable nicht stetig, sondern etwa binär ist, also nur zwei Zustände kennt [@Fromm]. Dies ist bei unserer Untersuchung der Fall, da wir anhand verschiedener unabhängiger Variablen prognostizieren möchten, ob ein Kreditnehmer eine gute oder schlechte Zahlungsmoral hat. Die resultierende Wahrscheinlichkeit erlaubt eine Klassifizierung entlang einer Grenze von in der Regel 50 Prozent.
 
 ###Cross Validation
 
@@ -229,42 +222,40 @@ Um die Genauigkeit besser einschätzen zu können, haben wir die Ergebnisse 10-f
 
  Trainingsdaten | Genauigkeit           | Area-Under-Curve 
 :---------------|----------------------:|-----------------------: 
- Cleaned        |__0.93310249 (+/-0.00036)__|0.69631654 (+/-0.00178)
- Cropped        |0.93024700 (+/-0.00039)|0.68822658 (+/-0.00157)
- Undersampled   |0.71425711 (+/-0.00286)|0.79303525 (+/-0.00286)
- Oversampled    |0.72424625 (+/-0.00071)|__0.80381864 (+/-0.00053)__
+ Cleaned        |__0.93397507 (+/-0.00054)__|0.69879368 (+/-0.00629)
+ Cropped        |0.93126669 (+/-0.00059)|0.69148342 (+/-0.00640)
+ Undersampled   |0.69003016 (+/-0.01381)|__0.76667270 (+/-0.01014)__
+ Oversampled    |0.71417067 (+/-0.00188)|0.78930479 (+/-0.00205)
 
 ##Support Vector Machine
 
-Eine Support Vector Machine (SVM) ist ein Klassifizierer, der Daten entlang einer durch Training optimierten Hyperebene klassifiziert (Boser et. al. 1992). Mit ihrer Hilfe lassen sich neue Beispiele klassifizieren. Sie zeichnet sich dadurch aus, dass ihre Ermittlung ein mathematisches Optimierungsproblem darstellt, bei dem der sogenannte Margin, also der minimale Abstand zwischen den geeigneten Trainingsdaten maximiert wird. Prinzipiell ist das Verfahren für höherdimensionale Probleme geeignet, sollte aber auch Kreditkunden anhand weniger Features klassifizieren können.
+Eine Support Vector Machine (SVM) ist ein Klassifizierer, der Daten entlang einer durch Training optimierten Hyperebene klassifiziert [@Boser]. Mit ihrer Hilfe lassen sich neue Beispiele klassifizieren. Sie zeichnet sich dadurch aus, dass ihre Ermittlung ein mathematisches Optimierungsproblem darstellt, bei dem der sogenannte Margin, also der minimale Abstand zwischen den geeigneten Trainingsdaten maximiert wird. Prinzipiell ist das Verfahren für höherdimensionale Probleme geeignet, sollte aber auch Kreditkunden anhand weniger Features klassifizieren können.
 Das Modellieren mit der Support Vector Machine, in unserem Falle ein _Support Vector Classifier_, war äußerst zeitaufwändig. Aus diesem Grund haben wir auch zunächst die Standardparameter von SciKitLearn beibehalten. Ausserdem mussten wir eine Feature-Skalierung durchführen, da die SVM in SciKitLearn einen zentrierten Datensatz erwartet. Dies ließ sich aber mit dem zur Verfügung gestellten `StandardScaler` leicht bewerkstelligen.
-
-Da das Training mit der SVM so lang dauerte, haben wir eine GridSearch verwendet. GridSearch probiert alle Parameter in einem gegebenen Wertebereich iterativ aus und wählt dann diejenige SVM, die sich nach dem Scoring am besten geschlagen hat. 
 
 ###Grid Search
 
+Da das Training mit der SVM so lang dauerte, haben wir eine GridSearch verwendet. GridSearch probiert alle Parameter in einem gegebenen Wertebereich iterativ aus und wählt dann diejenige SVM, die sich nach dem Scoring am besten geschlagen hat. 
+
  Trainingsdaten | Genauigkeit           | Area-Under-Curve 
 :---------------|----------------------:|-----------------: 
- Cleaned        |__0.93310601 (+/-0.00000)__|0.69885151 (+/-0.00110)
- Cropped        |0.93050522 (+/-0.00000)|0.49841584 (+/-0.01949)
- Undersampled   |0.50634576 (+/-0.00000)|__0.72650176 (+/-0.00001)__
- Oversampled    |0.61334848 (+/-0.00000)|0.66289212 (+/-0.00000)
+ Cleaned        |__0.93595460 (+/-0.00191)__|0.76570476 (+/-0.04041)
+ Cropped        |0.93775118 (+/-0.00332)|0.68749805 (+/-0.04511)
+ Undersampled   |0.77054545 (+/-0.03273)|0.85431278 (+/-0.02827)
+ Oversampled    |0.78555541 (+/-0.01007)|__0.85795559 (+/-0.01131)__
 
 Wir denken, dass ein Hauptgrund für die schlechte Performance der SVM die geringe Trainingsmenge ist. Als wir versuchsweise die Zahl der Samples iterativ erhöhten, ließ sich eine leichte Verbesserung in Genauigkeit und AUC-Score erkennen. Da dabei aber, wie schon erwähnt, die Rechenzeit quadratisch ansteigt, ist dieses Verfahren in unserem Falle jedoch äußerst unpraktikabel.
 
-Ausserdem nutzten wir für den AUC-Score die Wahrscheinlichkeiten des jeweiligen Estimators. SVMs sind eigentlich nicht dafür ausgelegt Wahrscheinlichkeiten zu bestimmen, das Feature ist in SciKitLearn dennoch mittels 5-facher Kreuzvalidierung implementiert. Dadurch dauerte die Erstellung des Modells noch länger.
-
 ##Random Forest
 
-Ein Random Forest Klassifikator setzt sich stets aus mehreren unkorrelierten Entscheidungsbäumen zusammen (Breimann 2001). Diese unterscheiden sich in der Teilmenge der gewählten Features aus der Gesamtmenge und können parallel berechnet werden, so dass sich etwa zur SVM ein deutlicher Geschwindigkeitsvorteil beim Trainieren ergibt. Der optimale Entscheidungsbaum klassifiziert die Subjekte in den Werten seiner Endknoten mit der größten Zuverlässigkeit. Da in unserem Datensatz die Zahl der Features recht gering ist, droht kein Overfitting durch einen zu tiefen Baum, was das Verfahren für die Klassifizierung von Kreditkunden geeignet erscheinen lässt. 
+Ein Random Forest Klassifikator setzt sich stets aus mehreren unkorrelierten Entscheidungsbäumen zusammen [@Breimann]. Diese unterscheiden sich in der Teilmenge der gewählten Features aus der Gesamtmenge und können parallel berechnet werden, so dass sich etwa zur SVM ein deutlicher Geschwindigkeitsvorteil beim Trainieren ergibt. Der optimale Entscheidungsbaum klassifiziert die Subjekte in den Werten seiner Endknoten mit der größten Zuverlässigkeit. Da in unserem Datensatz die Zahl der Features recht gering ist, droht kein Overfitting durch einen zu tiefen Baum, was das Verfahren für die Klassifizierung von Kreditkunden geeignet erscheinen lässt. 
 
 
  Trainingsdaten | Genauigkeit           | Area-Under-Curve 
 :---------------|----------------------:|-----------------: 
- Cleaned        |__0.93463729 (+/-0.00064)__|0.83709276 (+/-0.00154)
- Cropped        |0.93243658 (+/-0.00012)|0.81987760 (+/-0.00084)
- Undersampled   |0.76451742 (+/-0.00077)|0.84201142 (+/-0.00041)
- Oversampled    |0.69694936 (+/-0.00146)|__0.94609304 (+/-0.00057)__
+ Cleaned        |__0.93570641 (+/-0.00127)__|0.84033864 (+/-0.00531)
+ Cropped        |0.84794846 (+/-0.25748)|0.77564735 (+/-0.17118)
+ Undersampled   |0.66327441 (+/-0.19364)|0.66327441 (+/-0.19364)
+ Oversampled    |0.78727052 (+/-0.17876)|__0.99710297 (+/-0.00591)__
 
 Zusätzlich gibt ein Random Forest auch eine Bewertung der Wichtigkeit der einzelnen Features an, da er bei der Erstellung der Entscheidungsbäume alle Features nach ihrer Aussagekraft unterteilt, um die Baumknoten sinnvoll zu bilden.:
 
@@ -293,10 +284,9 @@ Als wir das unwichtigste Feature testweise ausgelassen haben, hat sich dies sofo
 
 #Performancevergleich und Ergebnisse
 
-Zunächst wollten wir uns nur auf das Genauigkeitsmaß beschränken, welches sich mit bei den jeweiligen Klassifikatoren in SciKitLearn leicht ermitteln läßt. Der ursprüngliche Wettbewerb auf [kaggle.com](https://www.kaggle.com/c/GiveMeSomeCredit) wurde jedoch nach der _Area Under Curve_ (AUC) der Receiver _Operating Characteristic_ bewertet. Deshalb haben wir uns entschieden, beide Metriken in den Vergleich aufzunehmen. 
+Zunächst wollten wir uns nur auf das Genauigkeitsmaß beschränken, welches sich mit bei den jeweiligen Klassifikatoren in SciKitLearn leicht ermitteln läßt. Der ursprüngliche Wettbewerb auf [kaggle.com](https://www.kaggle.com/c/GiveMeSomeCredit) [@kaggle] wurde jedoch nach der _Area Under Curve_ (AUC) der Receiver _Operating Characteristic_ bewertet. Betrachtet man ausserdem die Genauigkeit der Modell auf den bereinigten und beschnittenen Datensätzen, erklärt sich der hohe Wert durch die Unausgeglichenheit Zielklasse. Deshalb haben wir uns entschieden, beide Metriken in den Vergleich aufzunehmen, jedoch die Performance vorrangig nach der AUC-Score zu bewerten. 
 
-Tatsächlich scheint die Bewertung nach ROC-AUC auch das bessere Mass zu sein (siehe [Huang et. al. - Using AUC and Accuracy in Evaluating Learning Algorithms
-](http://www.cs.ust.hk/~qyang/537/Papers/AUC-evaluation.pdf)). Sie stellt die Richtig-Positiv-Rate und die Falsch-Positiv-Rate für alle möglichen Entscheidungsgrenzen gegenüber. Im Gegensatz dazu bewertet die Genaugkeit nur, wieviele korrekte Klassifikationen mit einer fixen Entscheidungsgrenze durchgeführt wurden. Die Bewertung mit AUC-Score ist also sehr viel allgemeiner.
+Tatsächlich scheint die Bewertung nach ROC-AUC auch das bessere Mass zu sein [@Huang]. Sie stellt die Richtig-Positiv-Rate und die Falsch-Positiv-Rate für alle möglichen Entscheidungsgrenzen gegenüber. Im Gegensatz dazu bewertet die Genaugkeit nur, wieviele korrekte Klassifikationen mit einer fixen Entscheidungsgrenze durchgeführt wurden. Die Bewertung mit AUC-Score ist also sehr viel allgemeiner.
 
 Bei den Verfahren Random Forest und Logistic Regression haben wir zwar zunächst verschiedene Parameter ausprobiert, einen signifikanten Leistungsunterschied konnten wir jedoch eher bei den verschiedenen Formen der Trainingsdaten erkennen. Deshalb haben wir die Standardparameter beibehalten. 
 Eine GridSearch für diese beiden Klassifikatoren könnte die Ergebnisse eventuell noch verbessern, jedoch haben wir am Beispiel der Support Vector Machine schon gemerkt, dass dieser Unterschied sehr gering ausfallen kann. GridSearch ist ebenfalls ein sehr zeitaufwändiges Verfahren.
@@ -328,14 +318,8 @@ In diesem Beleg sollte demonstriert werden, dass eine Klassifizierungsaufgabe au
 
 Es zeigte sich, dass Klassifizierer, in der Regel mit Standardparametern in SciKitLearn, dafür geeignet sind, mit einer recht hohen Zuverlässigkeit Zahlungsprobleme von potenziellen Kreditnehmern anhand weniger Features vorherzusagen. Dies wurde mit aus den Trainingsdaten vor dem Training extrahierten Testdaten belegt. Wenig üerraschend zeigen die Klassifizierer dabei unterschiedliche Genauigkeiten. Da insbesondere das Feature zum monatlichen Einkommen in den Datensätzen bei einer großen Anzahl an Einträgen einen NaN-Wert aufwies, mussten Spaltenmittelwerte gebildet werden. Auf die Präzision der Vorhersagen wirkte sich dies nicht negativ aus.
 
-Ein Random Forest Klassifizierer hat in unseren Analysen die höchste Zuverlässigkeit auf dem gegebenen Datensatz gezeigt. Den Banken wäre also zu empfehlen, einen solchen zu trainieren und für die Klassifizierung ihrer Neukunden zu verwenden, um ihr Kreditgeschäft hinsichtlich der Häufigkeit von Zahlungsausfällen bei der Kredittilgung zu optimieren.
+Ein Random Forest Klassifizierer hat in unseren Analysen die höchste Zuverlässigkeit auf dem gegebenen Datensatz gezeigt. Den Banken wäre also zu empfehlen, einen solchen zu trainieren und für die Klassifizierung ihrer Neukunden zu verwenden, um ihr Kreditgeschäft hinsichtlich der Häufigkeit von Zahlungsausfällen bei der Kredittilgung zu optimieren. Dabei sollte darauf geachtet werden, dass die Trainingsdaten möglichst ausgewogen in Bezug auf die Zielklasse ist.
 
 Da die uns zur Verfügung stehende CPU-Leistung nicht ausgereicht hat, eine Support-Vector-Maschine mit einem höheren Anteil des Datensatzes zu trainieren, bleibt für zukünftige Untersuchungen die Frage offen, ob sie tatsächlich bessere Ergebnisse im Vergleich zu einem Random Forest Klassifizierer zeigen würde.
 
-
-Literatur:
-
-Boser, Bernhard et. al. (1992): A training algorithm for optimal margin classifiers. In Fifth Annual Workshop on Computational Learning Theory, S. 144-152.
-Breimann, Leo (2001): Random Forests. URL: [http://link.springer.com/article/10.1023%2FA%3A1010933404324#]. Abgerufen am: 30.07.2015.
-Fromm, Sabine (2005): Binäre logistische Regressionsanalyse. URL:[http://www.uni-bamberg.de/fileadmin/uni/fakultaeten/sowi_lehrstuehle/empirische_sozialforschung/pdf/bambergerbeitraege/Log-Reg-BBES.pdf]. Abgerufen am: 30.07.2015.
-Herta, Christian (2013): Logistische Regression. URL:[https://moodle.htw-berlin.de/pluginfile.php/203722/mod_resource/content/0/logisticRegression.pdf]. Abgerufen am: 30.07.2015.
+# Quellen
