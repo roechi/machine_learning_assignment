@@ -96,7 +96,7 @@ Der bereits erwähnte Binärwert schlägt immerhin bei etwas mehr als 10.000 Dat
 
 ![](img/output_10_1.png-scaled.png)\
 
-Ein Histogramm dieser Personengruppe zeigt noch einmal deutlich, wie klein der Anteil der Bankkunden mit erheblichem Zahlungsverzug ist. Im Datensatz sind etwa sieben Prozent betroffen.
+Ein Histogramm dieser Personengruppe zeigt noch einmal deutlich, wie klein der Anteil der Bankkunden mit erheblichem Zahlungsverzug ist. Im Datensatz sind etwa sieben Prozent betroffen. Dieser kleine Anteil bewirkt natürlich ein bedeutendes Ungleichgewicht im Datensatz.
 
 ##Explorative Analyse der relevanten einzelnen Features
 
@@ -214,7 +214,7 @@ Das jeweilige Model wurde jeweils zehn Mal trainiert und getestet und der Mittel
 
 ##Logistic Regression
 
-Zunächst haben wir eine einfache Logistische Regression angewendet. Entgegen dem Namen handelt es sich dabei um eine Klassifikationsmethode und nicht um eine Regression, die abhängige und unabhängige Variablen in ihrem Verhältnis zueinander untersucht. Diese Generalisierung der linearen Regression wird verwendet, wenn die abhängige Zielvariable nicht stetig, sondern etwa binär ist, also nur zwei Zustände kennt. Dies ist bei unserer Untersuchung der Fall, da wir anhand verschiedener unabhängiger Variablen prognostizieren möchten, ob ein Kreditnehmer eine gute oder schlechte Zahlungsmoral hat. Die resultierende Wahrscheinlichkeit erlaubt eine Klassifizierung entlang einer Grenze von in der Regel 50 Prozent.
+Zunächst haben wir eine einfache Logistische Regression angewendet. Entgegen dem Namen handelt es sich dabei um eine Klassifikationsmethode und nicht um eine Regression, die abhängige und unabhängige Variablen in ihrem Verhältnis zueinander untersucht (Herta 2013, S. 10). Diese Generalisierung der linearen Regression wird verwendet, wenn die abhängige Zielvariable nicht stetig, sondern etwa binär ist, also nur zwei Zustände kennt (Fromm, 2005, S.5). Dies ist bei unserer Untersuchung der Fall, da wir anhand verschiedener unabhängiger Variablen prognostizieren möchten, ob ein Kreditnehmer eine gute oder schlechte Zahlungsmoral hat. Die resultierende Wahrscheinlichkeit erlaubt eine Klassifizierung entlang einer Grenze von in der Regel 50 Prozent.
 
  Trainingsdaten | Genauigkeit           | Area-Under-Curve 
 :---------------|----------------------:|-----------------------: 
@@ -236,7 +236,7 @@ Um die Genauigkeit besser einschätzen zu können, haben wir die Ergebnisse 10-f
 
 ##Support Vector Machine
 
-Eine Support Vector Machine (SVM) ist ein Klassifizierer, der Daten entlang einer durch Training optimierten Hyperebene klassifiziert. Mit ihrer Hilfe lassen sich neue Beispiele klassifizieren. Sie zeichnet sich dadurch aus, dass ihre Ermittlung ein mathematisches Optimierungsproblem darstellt, bei dem der sogenannte Margin, also der minimale Abstand zwischen den geeigneten Trainingsdaten maximiert wird. Prinzipiell ist das Verfahren für höherdimensionale Probleme geeignet, sollte aber auch Kreditkunden anhand weniger Features klassifizieren können.
+Eine Support Vector Machine (SVM) ist ein Klassifizierer, der Daten entlang einer durch Training optimierten Hyperebene klassifiziert (Boser et. al. 1992). Mit ihrer Hilfe lassen sich neue Beispiele klassifizieren. Sie zeichnet sich dadurch aus, dass ihre Ermittlung ein mathematisches Optimierungsproblem darstellt, bei dem der sogenannte Margin, also der minimale Abstand zwischen den geeigneten Trainingsdaten maximiert wird. Prinzipiell ist das Verfahren für höherdimensionale Probleme geeignet, sollte aber auch Kreditkunden anhand weniger Features klassifizieren können.
 Das Modellieren mit der Support Vector Machine, in unserem Falle ein _Support Vector Classifier_, war äußerst zeitaufwändig. Aus diesem Grund haben wir auch zunächst die Standardparameter von SciKitLearn beibehalten. Ausserdem mussten wir eine Feature-Skalierung durchführen, da die SVM in SciKitLearn einen zentrierten Datensatz erwartet. Dies ließ sich aber mit dem zur Verfügung gestellten `StandardScaler` leicht bewerkstelligen.
 
 Da das Training mit der SVM so lang dauerte, haben wir eine GridSearch verwendet. GridSearch probiert alle Parameter in einem gegebenen Wertebereich iterativ aus und wählt dann diejenige SVM, die sich nach dem Scoring am besten geschlagen hat. 
@@ -256,7 +256,7 @@ Ausserdem nutzten wir für den AUC-Score die Wahrscheinlichkeiten des jeweiligen
 
 ##Random Forest
 
-Ein Random Forest Klassifikator setzt sich stets aus mehreren unkorrelierten Entscheidungsbäumen zusammen. Diese unterscheiden sich in der Teilmenge der gewählten Features aus der Gesamtmenge und können parallel berechnet werden, so dass sich etwa zur SVM ein deutlicher Geschwindigkeitsvorteil beim Trainieren ergibt. Der optimale Entscheidungsbaum klassifiziert die Subjekte in den Werten seiner Endknoten mit der größten Zuverlässigkeit. Da in unserem Datensatz die Zahl der Features recht gering ist, droht kein Overfitting durch einen zu tiefen Baum, was das Verfahren für die Klassifizierung von Kreditkunden geeignet erscheinen lässt. 
+Ein Random Forest Klassifikator setzt sich stets aus mehreren unkorrelierten Entscheidungsbäumen zusammen (Breimann 2001). Diese unterscheiden sich in der Teilmenge der gewählten Features aus der Gesamtmenge und können parallel berechnet werden, so dass sich etwa zur SVM ein deutlicher Geschwindigkeitsvorteil beim Trainieren ergibt. Der optimale Entscheidungsbaum klassifiziert die Subjekte in den Werten seiner Endknoten mit der größten Zuverlässigkeit. Da in unserem Datensatz die Zahl der Features recht gering ist, droht kein Overfitting durch einen zu tiefen Baum, was das Verfahren für die Klassifizierung von Kreditkunden geeignet erscheinen lässt. 
 
 
  Trainingsdaten | Genauigkeit           | Area-Under-Curve 
@@ -331,3 +331,11 @@ Es zeigte sich, dass Klassifizierer, in der Regel mit Standardparametern in SciK
 Ein Random Forest Klassifizierer hat in unseren Analysen die höchste Zuverlässigkeit auf dem gegebenen Datensatz gezeigt. Den Banken wäre also zu empfehlen, einen solchen zu trainieren und für die Klassifizierung ihrer Neukunden zu verwenden, um ihr Kreditgeschäft hinsichtlich der Häufigkeit von Zahlungsausfällen bei der Kredittilgung zu optimieren.
 
 Da die uns zur Verfügung stehende CPU-Leistung nicht ausgereicht hat, eine Support-Vector-Maschine mit einem höheren Anteil des Datensatzes zu trainieren, bleibt für zukünftige Untersuchungen die Frage offen, ob sie tatsächlich bessere Ergebnisse im Vergleich zu einem Random Forest Klassifizierer zeigen würde.
+
+
+Literatur:
+
+Boser, Bernhard et. al. (1992): A training algorithm for optimal margin classifiers. In Fifth Annual Workshop on Computational Learning Theory, S. 144-152.
+Breimann, Leo (2001): Random Forests. URL: [http://link.springer.com/article/10.1023%2FA%3A1010933404324#]. Abgerufen am: 30.07.2015.
+Fromm, Sabine (2005): Binäre logistische Regressionsanalyse. URL:[http://www.uni-bamberg.de/fileadmin/uni/fakultaeten/sowi_lehrstuehle/empirische_sozialforschung/pdf/bambergerbeitraege/Log-Reg-BBES.pdf]. Abgerufen am: 30.07.2015.
+Herta, Christian (2013): Logistische Regression. URL:[https://moodle.htw-berlin.de/pluginfile.php/203722/mod_resource/content/0/logisticRegression.pdf]. Abgerufen am: 30.07.2015.
