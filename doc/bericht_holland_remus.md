@@ -17,7 +17,7 @@ Es liegen uns 150.000 Datensätze von Bankkunden vor. Diese umfassen neben versc
 
 Dafür analysieren wir den Datensatz erst einmal hinsichtlich bestimmter Auffälligkeiten und auch bezüglich der vorhandenen Datenqualität, führen also die sogenannte explorative Datenanalyse durch. Aus ihr ergeben sich idealerweise bereits erste Erkenntnisse, welche der Features besser als andere geeignet erscheinen, um mit dem Ergebnis "Guter Kreditnehmer" oder "Risikoreicher Kreditnehmer" zu korrelieren. Anschließend wird auf Basis des ersten Punkts von uns der Datensatz optimiert. Ermittelte Schwachstellen werden wenn möglich kompensiert und Skalierungen so gewählt, dass bildliche Darstellungen, die sogenannten Plots, eine möglichst hohe Aussagekraft beinhalten. Darauf folgt die Klassifikationsphase. In ihr werden wir geeignete Klassifikationsalgorithmen ermitteln und zur Anwendung bringen. Ergebnis soll ein Klassifikator sein, der den gewünschten Anforderungen, also einer hohen Trefferquote bei den Vorhersagen, entspricht. Eine Evaluation und ein Fazit schließen sich an.
 
-Der Datensatz entstammt der Web-Platform [www.kaggle.com](https://www.kaggle.com) und dort dem bereits beendeten Wettbewerb [_Give me some Credit_](https://www.kaggle.com/c/GiveMeSomeCredit) [@kaggle] aus dem Jahr 2011. Ziel dieses Belegs ist es allerdings nicht, die Wettbewerbskriterien auf kaggle zu erfüllen. Uns geht es darum, die Mächtigkeit der Werkzeuge des Machinellen Lernens zu demonstrieren, um realwirtschaftliche Probleme zu erfassen. Da uns auf kaggle keine geeigneten Testdaten zur Verfügung stehen, in denen ebenfalls das Kreditausfallrisiko in einer Form gegeben ist, so dass die erfolgreiche Anwendung eines geeigneten Klassifikators bewiesen werden kann, nutzen wir stattdessen randomisierte Datensätze aus den Trainingsdaten zur Verifizierung unserer Arbeit.
+Der Datensatz entstammt der Web-Platform [www.kaggle.com](https://www.kaggle.com) und dort dem bereits beendeten Wettbewerb [_Give me some Credit_](https://www.kaggle.com/c/GiveMeSomeCredit) [@kaggle] aus dem Jahr 2011. Ziel dieses Belegs ist es allerdings nicht, die Wettbewerbskriterien auf kaggle zu erfüllen. Uns geht es darum, die Mächtigkeit der Werkzeuge des Machinellen Lernens zu demonstrieren, um realwirtschaftliche Probleme zu erfassen. Da uns auf kaggle keine geeigneten Testdaten zur Verfügung stehen, in denen ebenfalls das Kreditausfallrisiko in einer Form gegeben ist, so dass die erfolgreiche Anwendung eines geeigneten Klassifikators bewiesen werden kann, nutzen wir stattdessen randomisierte Testdaten aus den mit `cs-training.csv` betitelten Daten zur Verifizierung unserer Arbeit.
 
 #Explorative Datenanalyse
 In den vorliegenden Daten finden primär zehn Features Verwendung, die die Bankkunden erfassen helfen und schließlich analysierbar machen:
@@ -199,7 +199,7 @@ Von diesen 150.000 Datensätzen verfügten 29.731 über NaN-Einträge. Für die 
 
 Darüber hinaus haben wir unrealistische oder fehlerhaft erscheinende Extremwerte (Outliers) entfernt. Der erlaubte Wertebereich wurde hierbei durch ein Vielfaches der Standardabweichung bestimmt. Der jeweilige Faktor wurde für jede Klasse händisch ermittelt.
 
-Aufgrund des starken Ungleichgewichts in der Zielklasse, haben wir ausserdem Oversampling und Undersampling angewendet. Beide Verfahren dienen dazu, einen möglichst ausgeglichenen Trainingsdatensatz zu erhalten.
+Aufgrund des starken Ungleichgewichts in der Zielklasse, haben wir ausserdem Oversampling und Undersampling angewendet. Beide Verfahren dienen dazu, einen möglichst ausgeglichenen Datensatz zu erhalten.
 
 - Undersampling: Aus dem Datensatz werden zufällig aus beiden Klassifikationen gleichviele Daten gewählt und als Trainingsdaten verwendet. Der Undersampling-Trainingsdatensatz hatte dementsprechend einen geringen Umfang.
 - Oversampling: Es werden so oft Daten der unterrepräsentierten Klasse kopiert und angefügt, bis ein Gleichgewicht eintritt. Der Oversampling-Datensatz war also in unserem Fall geringfügig größer.
@@ -210,7 +210,7 @@ Für das Over-/Undersampling haben wir die bereits im Data Cleaning behandelten 
 
 Im Folgenden beschreiben wir die Modelle, welche wir für diese Aufgabe entwickelt haben. Die Ergebnisse wurden gleichermaßen nach Genauigkeit und ROC-AUC-Score (Fläche unter der Receiver Operating Curve) bewertet.
 
-Die Modelle wurden jeweils einer 10-Fold Cross Validation unterzogen und der Mittelwert und der Standardfehler der Genauigkeit und der AUC ermittelt. Bei der Support Vector Machine wurden zum Training jedoch nur fünf Prozent der Daten verwendet, da die Dauer des Trainings quadratisch mit der Zahl der Samples skaliert und wir leider keine allzu leistungsfähigen Maschinen zur Verfügung hatten.
+Die Modelle wurden jeweils einer 10-Fold Cross Validation unterzogen und der Mittelwert und der Standardfehler der Genauigkeit und der AUC ermittelt. Bei der Support Vector Machine wurden für Training und Test jedoch insgesamt nur fünf Prozent der Daten verwendet, da die Dauer des Trainings quadratisch mit der Zahl der Samples skaliert und wir leider keine allzu leistungsfähigen Maschinen zur Verfügung hatten.
 
 ##Logistic Regression
 
@@ -218,14 +218,14 @@ Zunächst haben wir eine einfache Logistische Regression angewendet. Entgegen de
 
 ###Cross Validation
 
-Um die Genauigkeit besser einschätzen zu können, haben wir die Ergebnisse 10-fach Kreuzvalidiert.
+Um die Genauigkeit besser einschätzen zu können, haben wir die Ergebnisse 10-fach kreuzvalidiert. Dies wurde auch bei allen weiteren Modellen getan.
 
  Trainingsdaten | Genauigkeit           | Area-Under-Curve 
 :---------------|----------------------:|-----------------------: 
  Cleaned        |__0.93397507 (+/-0.00054)__|0.69879368 (+/-0.00629)
  Cropped        |0.93126669 (+/-0.00059)|0.69148342 (+/-0.00640)
- Undersampled   |0.69003016 (+/-0.01381)|__0.76667270 (+/-0.01014)__
- Oversampled    |0.71417067 (+/-0.00188)|0.78930479 (+/-0.00205)
+ Undersampled   |0.69003016 (+/-0.01381)|0.76667270 (+/-0.01014)
+ Oversampled    |0.71417067 (+/-0.00188)|__0.78930479 (+/-0.00205)__
 
 ##Support Vector Machine
 
@@ -234,7 +234,7 @@ Das Modellieren mit der Support Vector Machine, in unserem Falle ein _Support Ve
 
 ###Grid Search
 
-Da das Training mit der SVM so lang dauerte, haben wir eine GridSearch verwendet. GridSearch probiert alle Parameter in einem gegebenen Wertebereich iterativ aus und wählt dann diejenige SVM, die sich nach dem Scoring am besten geschlagen hat. 
+Da das Training mit der SVM so lang dauerte, haben wir eine GridSearch verwendet. GridSearch probiert alle Parameter in einem gegebenen Wertebereich iterativ aus und wählt dann diejenige SVM, die sich nach dem Scoring am besten geschlagen hat. Das beste Modell wurde dann 10-fach kreuzvalidiert.
 
  Trainingsdaten | Genauigkeit           | Area-Under-Curve 
 :---------------|----------------------:|-----------------: 
@@ -280,11 +280,11 @@ Diese sind also:
 
 Wenig überraschend sind die Kreditbelastung und die Belastung des monatlichen Guthabens von höchster Wichtigkeit. Das Alter spielt doch eine größere Rolle als wir dachten. 
 
-Als wir das unwichtigste Feature testweise ausgelassen haben, hat sich dies sofort schlecht auf den Random Forest Classifier ausgewirkt. Wir denken daher, dass der Feature-Raum der Ausgangsdaten schon auf das wesentliche beschränkt war. 
+Als wir die unwichtigeren Features testweise ausgelassen haben, hat sich dies sofort schlecht auf den Random Forest Classifier ausgewirkt. Wir denken daher, dass der Feature-Raum der Ausgangsdaten schon auf das wesentliche beschränkt war. 
 
 #Performancevergleich und Ergebnisse
 
-Zunächst wollten wir uns nur auf das Genauigkeitsmaß beschränken, welches sich mit bei den jeweiligen Klassifikatoren in SciKitLearn leicht ermitteln läßt. Der ursprüngliche Wettbewerb auf [kaggle.com](https://www.kaggle.com/c/GiveMeSomeCredit) [@kaggle] wurde jedoch nach der _Area Under Curve_ (AUC) der Receiver _Operating Characteristic_ bewertet. Betrachtet man ausserdem die Genauigkeit der Modell auf den bereinigten und beschnittenen Datensätzen, erklärt sich der hohe Wert durch die Unausgeglichenheit Zielklasse. Deshalb haben wir uns entschieden, beide Metriken in den Vergleich aufzunehmen, jedoch die Performance vorrangig nach der AUC-Score zu bewerten. 
+Zunächst wollten wir uns nur auf das Genauigkeitsmaß beschränken, welches sich mit bei den jeweiligen Klassifikatoren in SciKitLearn leicht ermitteln läßt. Der ursprüngliche Wettbewerb auf [kaggle.com](https://www.kaggle.com/c/GiveMeSomeCredit) [@kaggle] wurde jedoch nach der _Area Under Curve_ (AUC) der Receiver _Operating Characteristic_ bewertet. Betrachtet man ausserdem die Genauigkeit der Modelle auf den bereinigten und beschnittenen Datensätzen, erklärt sich der hohe Wert durch die Unausgeglichenheit Zielklasse. Deshalb haben wir uns entschieden, beide Metriken in den Vergleich aufzunehmen, jedoch die Performance vorrangig nach der AUC-Score zu bewerten. 
 
 Tatsächlich scheint die Bewertung nach ROC-AUC auch das bessere Mass zu sein [@Huang]. Sie stellt die Richtig-Positiv-Rate und die Falsch-Positiv-Rate für alle möglichen Entscheidungsgrenzen gegenüber. Im Gegensatz dazu bewertet die Genaugkeit nur, wieviele korrekte Klassifikationen mit einer fixen Entscheidungsgrenze durchgeführt wurden. Die Bewertung mit AUC-Score ist also sehr viel allgemeiner.
 
@@ -294,23 +294,21 @@ Eine GridSearch für diese beiden Klassifikatoren könnte die Ergebnisse eventue
 Die Rangfolge der Klassifikatoren, geordnet nach bester Vorhersage, gestaltet sich wie folgt:
 
 1. Random Forest
-2. Logistic Regression
-3. Support Vector Machine
+2. Support Vector Machine
+3. Logistic Regression
 
 Der Random Forest passt mit Abstand am besten auf die zugrunde liegenden Daten und ihre Features. Er hat sowohl nach Genauigkeit als auch nach AUC-Score deutlich am besten abgeschnitten.
-
-Die Logistische Regression und die SVM müssten sich eigentlich den zweiten Platz teilen, wenn es nach dem Scoring geht, da die Logistische Regression den höheren AUC-Score hat, aber die SVM genauer ist. Nach anderen Eigenschaften ist die Logistische Regression aber besser:
-
-- wir denken der AUC-Score trifft eine bessere Aussage über die Klassifikationsfähigkeit 
-- sie ist deutlich schneller 
 
 Speziell für die Bestimmung von Klassifikationswahrscheinlichkeiten sind SVMs eher unbrauchbar, wenngleich sie bei der reinen Klassifikation recht genau sind.
 
 Wir haben bei allen Modellen die volle Zahl der vorhandenen Features genutzt. Das Weglassen von anscheinend weniger wichtigen Features hat sich schlecht auf die Vorhersagefähigkeit der Klassifikatoren ausgewirkt. Die Auswahl der gegebenen Features scheint auf das Wesentliche beschränkt zu sein. Jedoch könnte eine Hinzunahme anderer Merkmale, wie zum Beispiel die Art und auch die bisherige Dauer des Anstellungsverhältnisses der Klienten von Vorteil sein.
 
-Betrachten wir die Vorverarbeitung der Trainingsdaten, fällt auf, dass die Genauigkeit auf dem bereinigten Datensatz am höchsten war. Für den AUC-Score war es jedoch besser, wenn die Daten durch Over- oder Undersampling in ein Gleichgewicht gebracht wurden.
+Betrachten wir die Vorverarbeitung der Trainingsdaten, fällt auf, dass die Genauigkeit auf dem bereinigten Datensatz am höchsten war. Das liegt aber an der Unausgeglichenheit der Zielklasse. Unter der Annahme ein Klassifikator würde immer dieselbe der beiden Klassen vorhersagen, wäre die Genauigkeit in diesem Falle bei 93%. Unter diesem Gesichstpunkt sollte man die Genauigkeit eher auf den Oversampled bzw Undersampled Datensätzen betrachten. Hier ist die Performance aller Modelle nicht sehr gut, allerdings ist eine Verbesserung der Klassifikation relativ zu Menge der Daten erkennbar. Wir vermuten, dass sich die Genaugkeit durch einen möglichst großen und ausgeglichenen Datensatz maximieren lässt. 
+Der AUC-Score war bei den größeren Datensätzen ebenfalls deutlich höher, jedoch war er weniger stark mit der Ausgewogenheit der Zielklasse korreliert.
 
-Für den Anwendungsfall empfehlen wir einen Random Forest Classifier mit 100 Bäumen auf einem bereinigten Datensatz, d.h. die Fehldaten werden durch den Spaltenmittelwert ersetzt und Aussreisser durch ein passendes Vielfaches der Standardabweichung ausgegrenzt.
+Das Weglassen von Daten wegen vorhandenen NaN-Einträgen hat sich auf alle Klassifikatoren negativ auusgewirkt.
+
+Für den Anwendungsfall empfehlen wir einen Random Forest Classifier mit 100 Bäumen auf einem bereinigten Datensatz, d.h. die Fehldaten werden durch den Spaltenmittelwert ersetzt und Aussreisser durch ein passendes Vielfaches der Standardabweichung ausgegrenzt. Wenn möglich, sollte die Zielklasse gleichmäßig repräsentiert sein und der Umfang der Daten möglichst groß gewählt werden.
 
 #Fazit
 
